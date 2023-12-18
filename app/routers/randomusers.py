@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 
+from models.users import UserIn, UserOut, UsersOut
+
 router = APIRouter()
 
 users = [
@@ -287,9 +289,11 @@ users = [
 
 @router.get("/randomusers")
 def generate_users():
-    print(f"*******Users: {users}")
     return {"results": users}
 
 @router.get("/randomusers/{user_id}")
 def get_user(user_id: int):
     return users[user_id]
+
+@router.put("/randomusers/")
+def create_user()
