@@ -33,6 +33,22 @@ class UserQueries:
                 row = db.fetchone()
                 return self.user_record_to_dict(row, db.description)
 
+    def get_users(self):
+        with pool.connection() as conn:
+            with conn.cursor() as db:
+                db.execute(
+                    """
+                    SELECT *
+                    FROM users
+                    """,
+                )
+                users = []
+                rows = db.fetchall()
+                for row in rows:
+                    user = self.user_record_to_dict(row, db.description)
+                    users.append(user)
+                return users
+
     def user_record_to_dict(self, row, description):
         user = None
         if row is not None:

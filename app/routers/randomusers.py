@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 import requests
 
-from models.users import UserIn, UserOut, UserOut
+from models.users import UserIn, UserOut, UserOut, UsersOut
 from queries.users import UserQueries
 
 router = APIRouter()
@@ -36,7 +36,8 @@ async def generate_user(
     pyinfo = UserIn(**info)
     return queries.create_user(pyinfo)
 
-@router.get("/app/randomusers/{user_id}", response_model=UserOut)
-def get_user(user_id: int):
-    return user[user_id]
-
+@router.get("/app/randomusers", response_model=UsersOut)
+def get_users(
+    queries: UserQueries = Depends(),
+):
+    return {"users": queries.get_users()}
