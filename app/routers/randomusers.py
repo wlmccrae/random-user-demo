@@ -295,5 +295,5 @@ def generate_users():
 def get_user(user_id: int):
     return users[user_id]
 
-@router.put("/randomusers/")
-def create_user()
+# @router.put("/randomusers/")
+# def create_user()

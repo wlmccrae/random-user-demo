@@ -1,28 +1,31 @@
 volumes:
   fastapidemo-data:
     external: true
+
 services:
-  fastapi:
-    build:
-      context: ./app
-      dockerfile: Dockerfile.dev
+  postgres:
+    image: postgres:15.2-bullseye
     environment:
-      DATABASE_URL: postgresql://admin:password@postgres/demodb
+      POSTGRES_PASSWORD: 9A4Sad6nF0yIJP3QSUq5
+      POSTGRES_USER: wlotus
+      POSTGRES_DB: fastapidemo_db
+    ports:
+      - 15432:5432
+    volumes:
+      - fastapidemo-data:/var/lib/postgresql/data
+
+  fastapi:
+    environment:
+      DATABASE_URL: postgresql://wlotus:9A4Sad6nF0yIJP3QSUq5@postgres/fastapidemo_db
       WAIT_HOSTS: postgres:5432
       PORT: 8000
       WAIT_BEFORE: 5
       WAIT_TIMEOUT: 60
+
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/api
-  postgres:
-    image: postgres:15.2-bullseye
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: admin
-      POSTGRES_DB: demodb
-    ports:
-      - "15432:5432"
-    volumes:
-      - fastapidemo-data:/var/lib/postgresql/data
+      - ./app:/app
