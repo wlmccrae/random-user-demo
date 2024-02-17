@@ -1,10 +1,6 @@
 from fastapi import FastAPI
 
-from routers import randomusers
+from routers import users
 
 app = FastAPI()
-app.include_router(randomusers.router, tags=["RANDOMUSERS"])
-
-# @app.get("/")
-# def read_root():
-#     return {"Hello": "World"}
+app.include_router(users.router, tags=["USERS"])

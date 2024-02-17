@@ -64,7 +64,6 @@ class UserQueries:
                     [user_id],
                 )
                 row = db.fetchone()
-                print(f"******* USER DATA TO RETURN: {row}")
                 return self.user_record_to_dict(row, db.description)
 
     def user_record_to_dict(self, row, description):

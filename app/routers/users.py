@@ -6,7 +6,7 @@ from queries.users import UserQueries
 
 router = APIRouter()
 
-@router.post("/app/randomuser", response_model=UserOut)
+@router.post("/app/user", response_model=UserOut)
 async def generate_user(
     queries: UserQueries = Depends(),
 ):
@@ -18,7 +18,6 @@ async def generate_user(
         response = requests.get(url)
         raw_user = response.json()
         random_user = raw_user["results"][0]
-        # print(f"*******Random User Fetched: {random_user}")
 
         info["name"] = random_user["name"]["first"] + ' ' + random_user["name"]["last"]
         info["dob"] = random_user["dob"]["date"]
@@ -26,7 +25,6 @@ async def generate_user(
         info["city"] = random_user["location"]["city"]
         info["state"] = random_user["location"]["state"]
         info["country"] = random_user["location"]["country"]
-        # print(f"*******User to write to database: {info}")
 
     except requests.exceptions.RequestException as e:
         print(f"*******There was an error: {e}.")
@@ -36,13 +34,13 @@ async def generate_user(
     pyinfo = UserIn(**info)
     return queries.create_user(pyinfo)
 
-@router.get("/app/randomusers", response_model=UsersOut)
+@router.get("/app/users", response_model=UsersOut)
 def get_users(
     queries: UserQueries = Depends(),
 ):
     return {"users": queries.get_users()}
 
-@router.get("/app/randomusers/{user_id}", response_model=UserOut)
+@router.get("/app/user/{user_id}", response_model=UserOut)
 def get_user(
     user_id: int,
     response: Response,
