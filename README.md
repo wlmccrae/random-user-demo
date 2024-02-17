@@ -20,4 +20,4 @@ If you are using Docker Desktop, you can interact with the containers in that ap
 6. Run **docker exec -it random-user-demo-fastapi-1 bash**.
 
 ## Design
-After the application is running locally, you can interact with the application's documentation [in your web browser] (http://localhost:8000/docs).
+After the application is running locally, you can interact with the application's documentation [in your web browser](http://localhost:8000/docs).
