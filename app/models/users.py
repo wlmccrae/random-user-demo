@@ -2,18 +2,22 @@ from pydantic import BaseModel
 
 
 class UserIn(BaseModel):
-    first_name: str
-    last_name: str
-    gender: str
+    name: str
+    dob: str
     email: str
+    city: str
+    state: str
+    country: str
 
 
 class UserOut(BaseModel):
     id: int
-    first_name: str
-    last_name: str
-    gender: str
+    name: str
+    dob: str
     email: str
+    city: str
+    state: str
+    country: str
 
 
 class UsersOut(BaseModel):

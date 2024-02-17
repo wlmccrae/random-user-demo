@@ -1,25 +1,42 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import requests
 
-from models.users import UserIn, UserOut, UsersOut
+from models.users import UserIn, UserOut, UserOut
+from queries.users import UserQueries
 
 router = APIRouter()
 
-@router.get("/randomuser")
-def generate_users():
+@router.post("/app/randomuser", response_model=UserOut)
+async def generate_user(
+    queries: UserQueries = Depends(),
+):
     url = "https://randomuser.me/api/"
+    info = {}
+
+    # Make the API call to fetch a random user.
     try:
         response = requests.get(url)
-        random_user = response.json()
-        print(f"*******Random User Fetched: {random_user}")
-        return random_user
+        raw_user = response.json()
+        random_user = raw_user["results"][0]
+        # print(f"*******Random User Fetched: {random_user}")
+
+        info["name"] = random_user["name"]["first"] + ' ' + random_user["name"]["last"]
+        info["dob"] = random_user["dob"]["date"]
+        info["email"] = random_user["email"]
+        info["city"] = random_user["location"]["city"]
+        info["state"] = random_user["location"]["state"]
+        info["country"] = random_user["location"]["country"]
+        # print(f"*******User to write to database: {info}")
+
     except requests.exceptions.RequestException as e:
         print(f"*******There was an error: {e}.")
         return None
 
-# @router.get("/randomusers/{user_id}")
-# def get_user(user_id: int):
-#     return users[user_id]
+    # Turn the Python dictionary into a Pydantic model.
+    pyinfo = UserIn(**info)
+    return queries.create_user(pyinfo)
 
-# @router.put("/randomusers/")
-# def create_user()
+@router.get("/app/randomusers/{user_id}", response_model=UserOut)
+def get_user(user_id: int):
+    return user[user_id]
+

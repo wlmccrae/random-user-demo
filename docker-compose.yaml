@@ -21,7 +21,6 @@ services:
       PORT: 8000
       WAIT_BEFORE: 5
       WAIT_TIMEOUT: 60
-
     build:
       context: ./app
       dockerfile: Dockerfile.dev
