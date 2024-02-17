@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 import requests
 
 from models.users import UserIn, UserOut, UserOut, UsersOut
@@ -41,3 +41,15 @@ def get_users(
     queries: UserQueries = Depends(),
 ):
     return {"users": queries.get_users()}
+
+@router.get("/app/randomusers/{user_id}", response_model=UserOut)
+def get_user(
+    user_id: int,
+    response: Response,
+    queries: UserQueries = Depends(),
+):
+    record = queries.get_user(user_id)
+    if record is None:
+        response.status_code = 404
+    else:
+        return record

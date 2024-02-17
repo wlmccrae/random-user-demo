@@ -2,6 +2,7 @@ from queries.pool import pool
 from models.users import UserIn
 
 class UserQueries:
+    ##### Write a user to the database. #####
     def create_user(self, user: UserIn):
         with pool.connection() as conn:
             with conn.cursor() as db:
@@ -33,6 +34,7 @@ class UserQueries:
                 row = db.fetchone()
                 return self.user_record_to_dict(row, db.description)
 
+    ##### Get all users from database #####
     def get_users(self):
         with pool.connection() as conn:
             with conn.cursor() as db:
@@ -48,6 +50,22 @@ class UserQueries:
                     user = self.user_record_to_dict(row, db.description)
                     users.append(user)
                 return users
+
+    ##### Get a specific user from database #####
+    def get_user(self, user_id):
+        with pool.connection() as conn:
+            with conn.cursor() as db:
+                db.execute(
+                    """
+                    SELECT *
+                    FROM users
+                    WHERE users.id = %s
+                    """,
+                    [user_id],
+                )
+                row = db.fetchone()
+                print(f"******* USER DATA TO RETURN: {row}")
+                return self.user_record_to_dict(row, db.description)
 
     def user_record_to_dict(self, row, description):
         user = None
