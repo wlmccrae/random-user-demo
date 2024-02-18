@@ -7,7 +7,7 @@ from queries.users import UserQueries
 router = APIRouter()
 
 @router.post("/app/user", response_model=UserOut)
-async def generate_user(
+async def create_user(
     queries: UserQueries = Depends(),
 ):
     url = "https://randomuser.me/api/"
