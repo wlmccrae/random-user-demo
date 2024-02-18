@@ -43,7 +43,6 @@ async def get_users(
 @router.get("/app/user/{user_id}", response_model=UserOut)
 async def get_user(
     user_id: int,
-    response: Response,
     queries: UserQueries = Depends(),
 ):
     record = queries.get_user(user_id)
@@ -65,12 +64,20 @@ async def get_user(
 async def update_user(
     user_id: int,
     user_info: UserIn,
-    response: Response,
     queries: UserQueries = Depends(),
 ):
     record = queries.update_user(user_id, user_info)
     if record is None:
-        response.status_code = 404
+        info = {}
+        info["id"] = 0
+        info["name"] = "NO SUCH USER"
+        info["dob"] = ""
+        info["email"] = ""
+        info["city"] = ""
+        info["state"] = ""
+        info["country"] = ""
+        pyinfo = UserOut(**info)
+        return pyinfo
     else:
         return record
 

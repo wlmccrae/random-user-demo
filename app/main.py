@@ -9,7 +9,7 @@ You will be able to:
 * **Generate** a random user and write their info to the database.
 * **Retrieve** the list of all users.
 * **Retrieve** a user's info.
-* **Update** a user's info (_not implemented_).
+* **Update** a user's info.
 * **Delete** a user.
 """
 
