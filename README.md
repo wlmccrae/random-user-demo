@@ -17,6 +17,7 @@ How to use this application locally using Docker:
 5. Run **docker-compose up**.
 
 If you are using Docker Desktop, you can interact with the containers in that application. To interact with the FastAPI container from the terminal:
+
 6. Run **docker exec -it random-user-demo-fastapi-1 bash**.
 
 ## Design
