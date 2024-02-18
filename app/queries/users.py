@@ -66,6 +66,31 @@ class UserQueries:
                 row = db.fetchone()
                 return self.user_record_to_dict(row, db.description)
 
+    ##### Delete a specific user #####
+    def delete_user(self, user_id):
+        with pool.connection() as conn:
+            with conn.cursor() as db:
+                db.execute(
+                    """
+                    DELETE FROM users
+                    WHERE users.id = %s
+                    """,
+                    [user_id],
+                )
+                db.execute(
+                    """
+                    SELECT *
+                    FROM users
+                    WHERE users.id = %s
+                    """,
+                    [user_id],
+                )
+                row = db.fetchone()
+        if row is not None:
+            return False
+        else:
+            return True
+
     def user_record_to_dict(self, row, description):
         user = None
         if row is not None:

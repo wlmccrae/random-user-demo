@@ -51,3 +51,10 @@ def get_user(
         response.status_code = 404
     else:
         return record
+
+@router.delete("/app/user/{user_id}", response_model=bool)
+def delete_user(
+    user_id: int,
+    queries: UserQueries = Depends(),
+):
+    return queries.delete_user(user_id)
