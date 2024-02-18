@@ -66,6 +66,47 @@ class UserQueries:
                 row = db.fetchone()
                 return self.user_record_to_dict(row, db.description)
 
+    ##### Update a user's info #####
+    def update_user(self, user_id, user_data):
+        with pool.connection() as conn:
+            with conn.cursor() as db:
+                params = [
+                    user_data.name,
+                    user_data.dob,
+                    user_data.email,
+                    user_data.city,
+                    user_data.state,
+                    user_data.country,
+                    user_id,
+                ]
+                db.execute(
+                    """
+                    UPDATE users
+                    SET name = %s
+                    , dob = %s
+                    , email = %s
+                    , city = %s
+                    , state = %s
+                    , country = %s
+                    WHERE id = %s
+                    RETURNING id
+                    , name
+                    , dob
+                    , email
+                    , city
+                    , state
+                    , country
+                    """,
+                    params,
+                )
+                record = None
+                row = db.fetchone()
+                if row is not None:
+                    record = {}
+                    for i, column in enumerate(db.description):
+                        record[column.name] = row[i]
+                return record
+
     ##### Delete a specific user #####
     def delete_user(self, user_id):
         with pool.connection() as conn:
