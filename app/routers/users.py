@@ -6,7 +6,7 @@ from queries.users import UserQueries
 
 router = APIRouter()
 
-@router.post("/app/user", response_model=UserOut)
+@router.post("/app/users", response_model=UserOut)
 async def create_user(
     queries: UserQueries = Depends(),
 ):
@@ -40,7 +40,7 @@ async def get_users(
 ):
     return {"users": queries.get_users()}
 
-@router.get("/app/user/{user_id}", response_model=UserOut)
+@router.get("/app/users/{user_id}", response_model=UserOut)
 async def get_user(
     user_id: int,
     queries: UserQueries = Depends(),
@@ -60,7 +60,7 @@ async def get_user(
     else:
         return record
 
-@router.put("/app/user/{user_id}", response_model=UserOut)
+@router.put("/app/users/{user_id}", response_model=UserOut)
 async def update_user(
     user_id: int,
     user_info: UserIn,
@@ -81,7 +81,7 @@ async def update_user(
     else:
         return record
 
-@router.delete("/app/user/{user_id}", response_model=bool)
+@router.delete("/app/users/{user_id}", response_model=bool)
 async def delete_user(
     user_id: int,
     queries: UserQueries = Depends(),
