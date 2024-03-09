@@ -1,8 +1,9 @@
 from queries.pool import pool
 from models.users import UserIn
 
+
 class UserQueries:
-    ##### Write a user to the database. #####
+    # Write a user to the database.
     def create_user(self, user: UserIn):
         with pool.connection() as conn:
             with conn.cursor() as db:
@@ -20,6 +21,7 @@ class UserQueries:
         if id is not None:
             return self.get_user(id)
 
+    # Get a specific user from the database
     def get_user(self, user_id):
         with pool.connection() as conn:
             with conn.cursor() as db:
@@ -34,7 +36,7 @@ class UserQueries:
                 row = db.fetchone()
                 return self.user_record_to_dict(row, db.description)
 
-    ##### Get all users from database #####
+    # Get all users from database
     def get_users(self):
         with pool.connection() as conn:
             with conn.cursor() as db:
@@ -51,22 +53,7 @@ class UserQueries:
                     users.append(user)
                 return users
 
-    ##### Get a specific user from database #####
-    def get_user(self, user_id):
-        with pool.connection() as conn:
-            with conn.cursor() as db:
-                db.execute(
-                    """
-                    SELECT *
-                    FROM users
-                    WHERE users.id = %s
-                    """,
-                    [user_id],
-                )
-                row = db.fetchone()
-                return self.user_record_to_dict(row, db.description)
-
-    ##### Update a user's info #####
+    # Update a user's info
     def update_user(self, user_id, user_data):
         with pool.connection() as conn:
             with conn.cursor() as db:
@@ -107,7 +94,7 @@ class UserQueries:
                         record[column.name] = row[i]
                 return record
 
-    ##### Delete a specific user #####
+    # Delete a specific user
     def delete_user(self, user_id):
         with pool.connection() as conn:
             with conn.cursor() as db:
@@ -132,6 +119,7 @@ class UserQueries:
         else:
             return True
 
+    # Turn a user record into a Python dictionary
     def user_record_to_dict(self, row, description):
         user = None
         if row is not None:

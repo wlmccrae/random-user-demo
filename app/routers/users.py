@@ -1,15 +1,14 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends
 import requests
 
-from models.users import UserIn, UserOut, UserOut, UsersOut
+from models.users import UserIn, UserOut, UsersOut
 from queries.users import UserQueries
 
 router = APIRouter()
 
+
 @router.post("/app/users", response_model=UserOut)
-async def create_user(
-    queries: UserQueries = Depends(),
-):
+async def create_user(queries: UserQueries = Depends()):
     url = "https://randomuser.me/api/"
     info = {}
 
@@ -34,11 +33,11 @@ async def create_user(
     pyinfo = UserIn(**info)
     return queries.create_user(pyinfo)
 
+
 @router.get("/app/users", response_model=UsersOut)
-async def get_users(
-    queries: UserQueries = Depends(),
-):
+async def get_users(queries: UserQueries = Depends()):
     return {"users": queries.get_users()}
+
 
 @router.get("/app/users/{user_id}", response_model=UserOut)
 async def get_user(
@@ -60,6 +59,7 @@ async def get_user(
     else:
         return record
 
+
 @router.put("/app/users/{user_id}", response_model=UserOut)
 async def update_user(
     user_id: int,
@@ -80,6 +80,7 @@ async def update_user(
         return pyinfo
     else:
         return record
+
 
 @router.delete("/app/users/{user_id}", response_model=bool)
 async def delete_user(
