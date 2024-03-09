@@ -6,9 +6,9 @@ client = TestClient(app)
 
 
 class FakeUserQueries:
-    def create_user(self):
+    def get_user(self, user_id):
         return {
-            "id": 13,
+            "id": user_id,
             "name": "Miro Peltola",
             "dob": "1947-11-22T00:52:50.790Z",
             "email": "miro.peltola@example.com",
@@ -49,17 +49,20 @@ class FakeUserQueries:
         ]
 
 
-# def test_create_user():
-#     # Arrange
-#     app.dependency_overrides[UserQueries] = FakeUserQueries
+def test_get_user():
+    # Arrange
+    app.dependency_overrides[UserQueries] = FakeUserQueries
 
-#     # Act
-#     res = client.post('/app/users')
+    # Act
+    res = client.get('/app/users/55')
+    data = res.json()
 
-#     # Assert
-#     assert res.status_code == 200
+    # Assert
+    assert res.status_code == 200
+    assert data["id"] == 55
 
-#     # Cleanup
+    # Cleanup
+    app.dependency_overrides = {}
 
 
 def test_get_users():
@@ -68,8 +71,11 @@ def test_get_users():
 
     # Act
     res = client.get('/app/users')
+    data = res.json()
 
     # Assert
     assert res.status_code == 200
+    assert len(data["users"]) == 3
 
     # Cleanup
+    app.dependency_overrides = {}
