@@ -58,7 +58,7 @@ class UserQueries:
         with pool.connection() as conn:
             with conn.cursor() as db:
                 params = [
-                    user_data.name,
+                    # user_data.name,
                     user_data.dob,
                     user_data.email,
                     user_data.city,
