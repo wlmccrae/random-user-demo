@@ -1,24 +1,57 @@
 # Random User Generator Demo
 
-## Creator
-- Name: Wanda McCrae
-- Date: February 2024
+**Author:** Wanda McCrae
+**Created:** February 2024
 
 A FastAPI backend that fetches randomly generated users from the [Random User Generator API](https://randomuser.me/) and saves them to a PostgreSQL database.
 
-## Project Initialization
+## Tech Stack
 
-How to use this application locally using Docker:
+- **FastAPI** — REST API framework
+- **PostgreSQL** — database (via psycopg3)
+- **Docker / Docker Compose** — containerized local development
+- **Pydantic** — data validation and serialization
 
-1. Clone this repository to your local machine.
-2. CD into the new directory.
-3. Run **docker volume create fastapidemo-data**.
-4. Run **docker-compose build --no-cache**.
-5. Run **docker-compose up**.
+## API Endpoints
 
-If you are using Docker Desktop, you can interact with the containers in that application. To interact with the FastAPI container from the terminal:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/app/users` | Fetch a random user from the external API and save to the database |
+| `GET` | `/app/users` | Retrieve all users |
+| `GET` | `/app/users/{user_id}` | Retrieve a single user by ID |
+| `PUT` | `/app/users/{user_id}` | Update a user's info |
+| `DELETE` | `/app/users/{user_id}` | Delete a user |
 
-6. Run **docker exec -it random-user-demo-fastapi-1 bash**.
+Each user record stores: name, date of birth, email, city, state, and country.
 
-## Design
-After the application is running locally, you can interact with the application's documentation [in your web browser](http://localhost:8000/docs).
+## Project Structure
+
+```
+app/
+├── main.py            # FastAPI app setup
+├── routers/users.py   # Route handlers
+├── models/users.py    # Pydantic models
+├── queries/users.py   # Database queries
+├── migrations/        # Database migrations
+├── tests/             # Tests
+└── requirements.txt
+docker-compose.yaml
+```
+
+## Local Setup (Docker)
+
+1. Clone this repository.
+2. `cd` into the project directory.
+3. Run `docker volume create fastapidemo-data`
+4. Run `docker-compose build --no-cache`
+5. Run `docker-compose up`
+
+To open a shell in the FastAPI container:
+
+```bash
+docker exec -it random-user-demo-fastapi-1 bash
+```
+
+## Interactive Docs
+
+Once running, visit [http://localhost:8000/docs](http://localhost:8000/docs) to explore and test the API via the auto-generated Swagger UI.
